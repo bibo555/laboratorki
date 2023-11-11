@@ -1,166 +1,119 @@
-/*#include <iostream>
-using namespace std;
-class matr {
-public:
-	int stl, str;
-	void Getstl
-	double* point;
-	matr(int stl,int str)
-	{
-		point = new double(stl * str);
-	}
-	void Print()
-	{
-
-	}
-};
-int main() {
-	matr A(2, 2);
-
-	return 0;
-}
-*/
 #include <iostream>
-using std::cout;
 using std::cin;
-int swap(int* a, int* b) {
-	int c = *a;
-	*a = *b;
-	*b = c;
-	return 0;
-}
-/*void vivod(int* temp_mas, int size) {
-	for (unsigned int i = 0; i < size; i++) {
-		cout << "�������� �������" << temp_mas[i] << std::endl;
+using std::cout;
 
 
-	}
-	return;
-}*/
-/*void chetnie(int* temp_mas, int size) {
-	int n, a = 0, c;
-	double sort;
+void input(int*& arr, int& size) { // Считывание массива
+	cout << "Enter the size of array: " << std::endl;
 	cin >> size;
-	temp_mas = new int[size];
-	for (int i; i < n; i++) {
-		if ((i % 2) == 0) {
-			temp_mas[a] = temp_mas[*i];
-			a++;
-
-		}
-
+	if (arr != nullptr) {
+		delete[] arr;
 	}
-	while (sort) {
-		sort = 0;
-		for (i = 0; i < a - 1; i++) {
-			if (temp_mas[i] > temp_mas[i + 1]) {
-				c = temp_mas[i];
-				temp_mas[i] = temp_mas[i + 1];
-				temp_mas[i + 1] = c;
-				sort = 1;
+	arr = new int[size];
+	cout << "Enter elements: " << std::endl;
+	for (int i = 0; i < size; i++) {
+		cin >> arr[i];
+	}
+}
+
+void output(int* arr, int size) { // Вывод массива
+	for (int i = 0; i < size; i++) {
+		cout << arr[i] << " ";
+	}
+	cout << std::endl;
+}
+
+
+void sortsum(int* arr, int size) {
+	int* b = new int[100];
+	int* mas = new int[size];
+	int* massiv = new int [size] {0};
+	int c = 0, s = 0;
+	int temparr = 0, tempmassiv = 0;
+	for (int i = 0; i < size; i++) {
+		mas[i] = arr[i];
+		while (mas[i] != 0) {
+			b[c] = mas[i] % 10;
+			mas[i] /= 10;
+			c++;
+		}
+		for (int j = 0; j < c; j += 2) { // идем по индексам цифр числа в строке;
+			massiv[i] += b[j];
+		}
+		c = 0;
+		s = 0;
+	}
+	for (int j = 0; j < size; j++) { // сортируем по сумме, запоминаем и меняем индексы.
+		for (int f = 0; f < size - 1; f++) {
+			if (massiv[f] > massiv[f + 1]) {
+				tempmassiv = massiv[f];
+				temparr = arr[f];
+				massiv[f] = massiv[f + 1];
+				massiv[f + 1] = tempmassiv;
+				arr[f] = arr[f + 1];
+				arr[f + 1] = temparr;
 			}
 		}
 	}
+	delete[] mas;
+	delete[] b;
+	delete[] massiv;
+}
 
-	return;
-
-}*/
-void tears(int* mas, int size) {
-	int count = 0;
-	int sum1, sum2;
-	int* s = new int[size];
+void sortlast(int* arr, int size) {
+	int temp = 0;
 	for (int i = 0; i < size; i++) {
-		int c = mas[i];
-		sum1 = 0;
-		sum2 = 0;
-		count = 0;
-		while (c != 0)
-		{
-			if (count % 2 == 0)
-				sum2 += c % 10;
-			else
-				sum1 += c % 10;
-			c /= 10;
-		}
-		if (count % 2 == 0)
-			s[i] = sum2;
-		else
-			s[i] = sum1;
-	}
-	for (int i = 0; i < size; i++)
-	{
 		for (int j = 0; j < size - 1; j++) {
-			if (s[j] < s[j + 1]) {
-				swap(&s[j], &s[j + 1]);
-				swap(&mas[j], &mas[j + 1]);
+			if (arr[j] % 10 > arr[j + 1] % 10) {
+				temp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = temp;
 			}
-
+			else if (arr[j] % 10 == arr[j + 1] % 10) {
+				if (arr[j] < arr[j + 1]) {
+					temp = arr[j];
+					arr[j] = arr[j + 1];
+					arr[j + 1] = temp;
+				}
+			}
 		}
 	}
-	delete[] s;
-	return;
 }
-void eweodnasort() {
-	return;
-}
-int* vvod(int size) {
-	int* temp_mas = new int[size];
-	for (int i = 0; i < size; i++) {
-		cin >> temp_mas[i];
-	}
-	return temp_mas;
-}
-void vivod(int* temp_mas, int size) {
-	for (int i = 0; i < size; i++) {
-		cout << temp_mas[i] << ' ';
-	}
-	return;
-}
-char* vvod1(int size) {
-	char* temp_mas = new char[size];
-	for (int i = 0; i < size; i++) {
-		cin >> temp_mas[i];
-	}
-	return temp_mas;
-}
-
-
 int main() {
-	int* temp_mas = NULL;
-	char* temp_mass = NULL;
-	int vibor = 0;
+	int choise = 0;
+	int* arr = nullptr;
 	int size = 0;
 	while (true) {
-		cout << "What task you want to choice?" << std::endl;
-		cout << " Task 1" << std::endl;
-		cout << " Task 2" << std::endl;
-		cout << " Task 3" << std::endl;
-		cout << " Task 4" << std::endl;
-		cout << " Task 5" << std::endl;
-		cin >> vibor;
-		switch (vibor) {
-		case 1:
-			cout << "Input lenght" << std::endl;
-			cin >> size;
-			temp_mas = vvod(size);
-			break;
-
-
-		case 3:
-			if (size != 0)
-				tears(temp_mas, size);
-			else
-				std::cout << "Mistake mas is empty or not exist";
-			break;
-		case 2:
-			vivod(temp_mas, size);
-		case 4:
-			break;
-		case 5:
-
-			break;
-		default:
+		cout << "What you want to do?" << std::endl;
+		cout << "1.Input array:" << std::endl;
+		cout << "2.Output array" << std::endl;
+		cout << "3.Sort array by sum of digits on even positions" << std::endl;
+		cout << "4.Sort by last number" << std::endl;
+		cout << "5.Exit " << std::endl;
+		cin >> choise;
+		switch (choise) {
+		case 1: {
+			input(arr, size);
 			break;
 		}
-		delete[] temp_mass;
+		case 2: {
+			output(arr, size);
+			break;
+		}
+		case 3: {
+			sortsum(arr, size);
+			break;
+		}
+		case 4: {
+			sortlast(arr, size);
+			break;
+		}
+		default: {
+			delete[] arr;
+			return 0;
+		}
+		}
 	}
+	delete[] arr;
+	return 0;
+}
