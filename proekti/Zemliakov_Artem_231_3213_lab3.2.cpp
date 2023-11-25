@@ -1,119 +1,127 @@
 #include <iostream>
-using std::cin;
-using std::cout;
+#include <string> // для c++ класса string
+#include <fstream> // для работы с файлами через fstream, ifstream, ofstream
+//str.size();
+//rfind - последние вхождение символа.
+//replace(арг1, агрг2) - замена местами.
+//strlen()
+//substr(1. индекс начинается подстрока, 2. количество символов);
+//find_first_of
+//find_last_of
+using namespace std;
 
-
-void input(int*& arr, int& size) { // Считывание массива
-	cout << "Enter the size of array: " << std::endl;
-	cin >> size;
-	if (arr != nullptr) {
-		delete[] arr;
-	}
-	arr = new int[size];
-	cout << "Enter elements: " << std::endl;
-	for (int i = 0; i < size; i++) {
-		cin >> arr[i];
-	}
+string file_format(const string str) {
+	int index = str.rfind('.');   //qwertasdfwertsadf wer
+	return str.substr(index);
 }
 
-void output(int* arr, int size) { // Вывод массива
-	for (int i = 0; i < size; i++) {
-		cout << arr[i] << " ";
-	}
-	cout << std::endl;
+string file_name(const string str) {
+	int index = str.find_last_of('\\');
+	int index2 = str.rfind('.');
+	return str.substr(index + 1, index2 - index - 1);
 }
 
-
-void sortsum(int* arr, int size) {
-	int* b = new int[100];
-	int* mas = new int[size];
-	int* massiv = new int [size] {0};
-	int c = 0, s = 0;
-	int temparr = 0, tempmassiv = 0;
-	for (int i = 0; i < size; i++) {
-		mas[i] = arr[i];
-		while (mas[i] != 0) {
-			b[c] = mas[i] % 10;
-			mas[i] /= 10;
-			c++;
-		}
-		for (int j = 0; j < c; j += 2) { // идем по индексам цифр числа в строке;
-			massiv[i] += b[j];
-		}
-		c = 0;
-		s = 0;
-	}
-	for (int j = 0; j < size; j++) { // сортируем по сумме, запоминаем и меняем индексы.
-		for (int f = 0; f < size - 1; f++) {
-			if (massiv[f] > massiv[f + 1]) {
-				tempmassiv = massiv[f];
-				temparr = arr[f];
-				massiv[f] = massiv[f + 1];
-				massiv[f + 1] = tempmassiv;
-				arr[f] = arr[f + 1];
-				arr[f + 1] = temparr;
-			}
-		}
-	}
-	delete[] mas;
-	delete[] b;
-	delete[] massiv;
+string file_path(const string str) {
+	int index = str.find_last_of('\\');
+	return str.substr(0, index);
 }
 
-void sortlast(int* arr, int size) {
-	int temp = 0;
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < size - 1; j++) {
-			if (arr[j] % 10 > arr[j + 1] % 10) {
-				temp = arr[j];
-				arr[j] = arr[j + 1];
-				arr[j + 1] = temp;
-			}
-			else if (arr[j] % 10 == arr[j + 1] % 10) {
-				if (arr[j] < arr[j + 1]) {
-					temp = arr[j];
-					arr[j] = arr[j + 1];
-					arr[j + 1] = temp;
+void file_disk(const string str) {
+	int index = str.find_first_of('\\');
+	cout << str.substr(0, index);
+}
+
+bool file_rename(string* str) {
+	string new_name; cin >> new_name;
+	int index = str->find_last_of('\\');
+	int index2 = str->rfind('.');
+	*str = str->substr(0, index) + '\\' + new_name + str->substr(index2);
+	return 1;
+}
+
+bool file_copy(const string file_path_full)
+{
+	string copy_path = file_path_full;
+	size_t slash = file_path_full.rfind("/");
+	size_t dot = file_path_full.rfind(".");
+	string copy_name;
+	copy_name += (file_path_full, slash + 1, dot - slash - 1) + "_copy";
+	copy_path.replace(slash + 1, dot - slash - 1, copy_name);
+
+	ifstream read;
+	read.open(file_path_full);
+
+
+	if (!read.fail())
+	{
+		ofstream write;
+		write.open(copy_path);
+		if (!write.fail())
+		{
+			string line;
+			if (write.is_open() && read.is_open())
+			{
+				while (getline(read, line))
+				{
+					write << line << endl;
 				}
 			}
+			write.close();
+			read.close();
+			return true;
 		}
+		else return false;
 	}
+	else return false;
 }
+
 int main() {
+	string str;
+	setlocale(LC_ALL, "Russian");
+	str = "C:\\workDir\\proglang2023-ealia28\\Abakaev.cpp";
+	string strcop = str;
 	int choise = 0;
-	int* arr = nullptr;
-	int size = 0;
 	while (true) {
-		cout << "What you want to do?" << std::endl;
-		cout << "1.Input array:" << std::endl;
-		cout << "2.Output array" << std::endl;
-		cout << "3.Sort array by sum of digits on even positions" << std::endl;
-		cout << "4.Sort by last number" << std::endl;
-		cout << "5.Exit " << std::endl;
+		cout << "Выберите действие: " << std::endl;
+		cout << "1. Получить расширение: " << std::endl;
+		cout << "2. Получить название: " << std::endl;
+		cout << "3. Получить расположение: " << std::endl;
+		cout << "4. Получить название диска: " << std::endl;
+		cout << "5. Переименовать файл" << std::endl;
+		cout << "6. Создать копию" << std::endl;
 		cin >> choise;
 		switch (choise) {
 		case 1: {
-			input(arr, size);
+			cout << file_format(str) << std::endl;
 			break;
 		}
 		case 2: {
-			output(arr, size);
+			cout << file_name(str);
+			cout << std::endl;
 			break;
 		}
 		case 3: {
-			sortsum(arr, size);
+			cout << file_path(str);
+			cout << std::endl;
 			break;
 		}
 		case 4: {
-			sortlast(arr, size);
+			file_disk(str);
+			cout << std::endl;
+			break;
+		}
+		case 5: {
+			file_rename(&str);
+			break;
+		}
+		case 6: {
+			file_copy(str);
 			break;
 		}
 		default: {
-			delete[] arr;
 			return 0;
 		}
 		}
 	}
-	delete[] arr;
 	return 0;
 }
